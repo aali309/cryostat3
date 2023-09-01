@@ -17,33 +17,76 @@ package io.cryostat.events;
 
 import java.io.IOException;
 import java.net.URI;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
+<<<<<<< HEAD
 import io.cryostat.core.sys.FileSystem;
+=======
+import org.openjdk.jmc.flightrecorder.controlpanel.ui.configuration.model.xml.JFCGrammar;
+import org.openjdk.jmc.flightrecorder.controlpanel.ui.configuration.model.xml.XMLAttributeInstance;
+import org.openjdk.jmc.flightrecorder.controlpanel.ui.configuration.model.xml.XMLModel;
+import org.openjdk.jmc.flightrecorder.controlpanel.ui.configuration.model.xml.XMLTagInstance;
+import org.openjdk.jmc.flightrecorder.controlpanel.ui.configuration.model.xml.XMLValidationResult;
+import org.openjdk.jmc.flightrecorder.controlpanel.ui.model.EventConfiguration;
+
+>>>>>>> 3d3534db (feat(eventtemplates): custom event templates in S3)
 import io.cryostat.core.templates.MutableTemplateService.InvalidEventTemplateException;
 import io.cryostat.core.templates.MutableTemplateService.InvalidXmlException;
 import io.cryostat.core.templates.Template;
 import io.cryostat.core.templates.TemplateType;
 import io.cryostat.targets.Target;
+<<<<<<< HEAD
 import io.cryostat.util.HttpMimeType;
 
 import io.smallrye.common.annotation.Blocking;
+=======
+import io.cryostat.targets.TargetConnectionManager;
+import io.cryostat.util.HttpStatusCodeIdentifier;
+import io.quarkus.runtime.StartupEvent;
+import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Uni;
+import io.vertx.core.Vertx;
+>>>>>>> 3d3534db (feat(eventtemplates): custom event templates in S3)
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+<<<<<<< HEAD
+=======
+import jakarta.ws.rs.NotFoundException;
+>>>>>>> 3d3534db (feat(eventtemplates): custom event templates in S3)
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
+<<<<<<< HEAD
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.RestForm;
 import org.jboss.resteasy.reactive.RestPath;
 import org.jboss.resteasy.reactive.RestResponse;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import org.jsoup.nodes.Document;
+=======
+import org.apache.http.entity.ContentType;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jboss.logging.Logger;
+import org.jboss.resteasy.reactive.RestForm;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
+import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
+
+import org.jboss.resteasy.reactive.RestPath;
+import org.jboss.resteasy.reactive.RestResponse;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+>>>>>>> 3d3534db (feat(eventtemplates): custom event templates in S3)
 
 @Path("")
 public class EventTemplates {
@@ -57,10 +100,44 @@ public class EventTemplates {
                     "Cryostat",
                     TemplateType.TARGET);
 
+<<<<<<< HEAD
     @Inject FileSystem fs;
     @Inject TargetTemplateService.Factory targetTemplateServiceFactory;
     @Inject S3TemplateService customTemplateService;
     @Inject Logger logger;
+=======
+    @Inject Vertx vertx;
+    @Inject TargetConnectionManager connectionManager;
+    @Inject S3Client storage;
+    @Inject Logger logger;
+
+    @ConfigProperty(name = "storage.buckets.event-templates.name")
+    String eventTemplatesBucket;
+
+    void onStart(@Observes StartupEvent evt) {
+        boolean exists = false;
+        try {
+            exists =
+                    HttpStatusCodeIdentifier.isSuccessCode(
+                            storage.headBucket(
+                                            HeadBucketRequest.builder()
+                                                    .bucket(eventTemplatesBucket)
+                                                    .build())
+                                    .sdkHttpResponse()
+                                    .statusCode());
+        } catch (Exception e) {
+            logger.info(e);
+        }
+        if (!exists) {
+            try {
+                storage.createBucket(
+                        CreateBucketRequest.builder().bucket(eventTemplatesBucket).build());
+            } catch (Exception e) {
+                logger.error(e);
+            }
+        }
+    }
+>>>>>>> 3d3534db (feat(eventtemplates): custom event templates in S3)
 
     @GET
     @Path("/api/v1/targets/{connectUrl}/templates")
@@ -76,6 +153,7 @@ public class EventTemplates {
     @POST
     @Path("/api/v1/templates")
     @RolesAllowed("write")
+<<<<<<< HEAD
     public Response postTemplatesV1(@RestForm("template") FileUpload body) {
         return Response.status(RestResponse.Status.PERMANENT_REDIRECT)
                 .location(URI.create("/api/v3/event_templates"))
@@ -111,6 +189,29 @@ public class EventTemplates {
     @RolesAllowed("write")
     public void deleteTemplates(@RestPath String templateName) {
         customTemplateService.deleteTemplate(templateName);
+=======
+    public Uni<Void> postTemplatesV1(@RestForm("template") FileUpload body) throws Exception {
+        CompletableFuture<Void> cf = new CompletableFuture<>();
+        var path = body.filePath();
+        vertx.fileSystem()
+                .readFile(path.toString())
+                .onComplete(
+                        ar -> {
+                            try {
+                                addTemplate(ar.result().toString());
+                                cf.complete(null);
+                            } catch (Exception e) {
+                                logger.error(e);
+                                cf.completeExceptionally(e);
+                            }
+                        })
+                .onFailure(
+                        ar -> {
+                            logger.error(ar.getCause());
+                            cf.completeExceptionally(ar.getCause());
+                        });
+        return Uni.createFrom().future(cf);
+>>>>>>> 3d3534db (feat(eventtemplates): custom event templates in S3)
     }
 
     @GET
@@ -198,5 +299,94 @@ public class EventTemplates {
                 .header(HttpHeaders.CONTENT_TYPE, HttpMimeType.JFC.mime())
                 .entity(doc.toString())
                 .build();
+    }
+
+    // static class S3TemplateService implements TemplateService {
+    //     S3Client s3;
+
+    //     @Override
+    //     public Optional<IConstrainedMap<EventOptionID>> getEvents(String arg0, TemplateType arg1)
+    //             throws FlightRecorderException {
+    //         return Optional.empty();
+    //     }
+
+    //     @Override
+    //     public List<Template> getTemplates() throws FlightRecorderException {
+    //         var objects = s3.listObjectsV2();
+    //         var templates = convertObjects(objects);
+    //         return templates;
+    //     }
+
+    //     @Override
+    //     public Optional<Document> getXml(String arg0, TemplateType arg1)
+    //             throws FlightRecorderException {
+    //         return Optional.empty();
+    //     }
+    // }
+
+    @Blocking
+    public Template addTemplate(String templateText)
+            throws InvalidXmlException, InvalidEventTemplateException, IOException {
+        try {
+            XMLModel model = EventConfiguration.createModel(templateText);
+            model.checkErrors();
+
+            for (XMLValidationResult result : model.getResults()) {
+                if (result.isError()) {
+                    // throw new InvalidEventTemplateException(result.getText());
+                    throw new IllegalArgumentException(result.getText());
+                }
+            }
+
+            XMLTagInstance configuration = model.getRoot();
+            XMLAttributeInstance labelAttr = null;
+            for (XMLAttributeInstance attr : configuration.getAttributeInstances()) {
+                if (attr.getAttribute().getName().equals("label")) {
+                    labelAttr = attr;
+                    break;
+                }
+            }
+
+            if (labelAttr == null) {
+                // throw new InvalidEventTemplateException(
+                //         "Template has no configuration label attribute");
+                throw new IllegalArgumentException("Template has no configuration label attribute");
+            }
+
+            String templateName = labelAttr.getExplicitValue();
+            templateName = templateName.replaceAll("[\\W]+", "_");
+
+            XMLTagInstance root = model.getRoot();
+            root.setValue(JFCGrammar.ATTRIBUTE_LABEL_MANDATORY, templateName);
+
+            String key = templateName;
+            storage.putObject(
+                    PutObjectRequest.builder()
+                            .bucket(eventTemplatesBucket)
+                            .key(key)
+                            .contentType(ContentType.APPLICATION_XML.getMimeType())
+                            .build(),
+                    RequestBody.fromString(model.toString()));
+
+            return new Template(
+                    templateName,
+                    getAttributeValue(root, "description"),
+                    getAttributeValue(root, "provider"),
+                    TemplateType.CUSTOM);
+        } catch (IOException ioe) {
+            // throw new InvalidXmlException("Unable to parse XML stream", ioe);
+            throw new IllegalArgumentException("Unable to parse XML stream", ioe);
+        } catch (ParseException | IllegalArgumentException e) {
+            // throw new InvalidEventTemplateException("Invalid XML", e);
+            throw new IllegalArgumentException("Invalid XML", e);
+        }
+    }
+
+    protected String getAttributeValue(XMLTagInstance node, String valueKey) {
+        return node.getAttributeInstances().stream()
+                .filter(i -> Objects.equals(valueKey, i.getAttribute().getName()))
+                .map(i -> i.getValue())
+                .findFirst()
+                .get();
     }
 }
