@@ -200,7 +200,6 @@ public class EventTemplates {
     }
 
     @POST
-    @Blocking
     @Path("/api/v1/templates")
     @RolesAllowed("write")
 <<<<<<< HEAD
@@ -215,6 +214,7 @@ public class EventTemplates {
     }
 
     @POST
+<<<<<<< HEAD
 <<<<<<< HEAD
     @Path("/api/v3/event_templates")
     @RolesAllowed("write")
@@ -252,6 +252,8 @@ public class EventTemplates {
         // FIXME this should redirect to a POST /api/v3/event_templates
 =======
     @Blocking
+=======
+>>>>>>> 00d915d4 (update @Blocking methods)
     @Path("/api/v3/event_templates")
     @RolesAllowed("write")
     public Uni<Void> postTemplates(@RestForm("template") FileUpload body) {
@@ -292,6 +294,7 @@ public class EventTemplates {
     }
 
     @DELETE
+    @Blocking
     @Path("/api/v3/event_templates/{templateName}")
     @RolesAllowed("write")
     public void deleteTemplates(@RestPath String templateName) {
@@ -316,6 +319,7 @@ public class EventTemplates {
     }
 
     @GET
+<<<<<<< HEAD
 <<<<<<< HEAD
     @Path("/api/v2.1/targets/{connectUrl}/templates/{templateName}/type/{templateType}")
     @RolesAllowed("read")
@@ -347,6 +351,9 @@ public class EventTemplates {
     @Blocking
 =======
 >>>>>>> 44d05132 (add endpoint for listing only custom templates)
+=======
+    @Blocking
+>>>>>>> 00d915d4 (update @Blocking methods)
     @Path("/api/v3/event_templates")
     @RolesAllowed("read")
     public List<Template> listTemplates() throws Exception {
@@ -358,9 +365,13 @@ public class EventTemplates {
 
     @GET
 <<<<<<< HEAD
+<<<<<<< HEAD
     @Blocking
 =======
 >>>>>>> 44d05132 (add endpoint for listing only custom templates)
+=======
+    @Blocking
+>>>>>>> 00d915d4 (update @Blocking methods)
     @Path("/api/v3/targets/{id}/event_templates")
     @RolesAllowed("read")
     public List<Template> listTargetTemplates(@RestPath long id) throws Exception {
@@ -374,11 +385,15 @@ public class EventTemplates {
 
     @GET
 <<<<<<< HEAD
+<<<<<<< HEAD
     @Blocking
     @Path("/api/v3/targets/{id}/event_templates/{templateType}/{templateName}")
     @RolesAllowed("read")
     public Response getTargetTemplate(
 =======
+=======
+    @Blocking
+>>>>>>> 00d915d4 (update @Blocking methods)
     @Path("/api/v3/targets/{id}/event_templates/{templateType}/{templateName}")
     @RolesAllowed("read")
     public String getTargetTemplate(
