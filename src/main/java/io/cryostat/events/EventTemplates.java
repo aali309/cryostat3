@@ -15,7 +15,9 @@
  */
 package io.cryostat.events;
 
+import java.io.ByteArrayInputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -260,8 +262,11 @@ public class EventTemplates {
                 .readFile(path.toString())
                 .onComplete(
                         ar -> {
-                            try {
-                                customTemplateService.addTemplate(ar.result().toString());
+                            var str = ar.result().toString();
+                            try (var stream =
+                                    new ByteArrayInputStream(
+                                            str.getBytes(StandardCharsets.UTF_8))) {
+                                customTemplateService.addTemplate(stream);
                                 cf.complete(null);
                             } catch (Exception e) {
                                 logger.error(e);
@@ -290,7 +295,7 @@ public class EventTemplates {
     @Path("/api/v3/event_templates/{templateName}")
     @RolesAllowed("write")
     public void deleteTemplates(@RestPath String templateName) {
-        customTemplateService.removeTemplate(templateName);
+        customTemplateService.deleteTemplate(templateName);
     }
 
     @GET
