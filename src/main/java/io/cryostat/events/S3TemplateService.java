@@ -15,7 +15,6 @@
  */
 package io.cryostat.events;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -65,6 +64,7 @@ import io.cryostat.Producers;
 import io.cryostat.StorageBuckets;
 import io.cryostat.core.FlightRecorderException;
 import io.cryostat.core.templates.MutableTemplateService;
+<<<<<<< HEAD
 import io.cryostat.core.templates.MutableTemplateService.InvalidEventTemplateException;
 import io.cryostat.core.templates.MutableTemplateService.InvalidXmlException;
 import io.cryostat.core.templates.Template;
@@ -121,10 +121,11 @@ public class S3TemplateService implements MutableTemplateService {
 import io.cryostat.Producers;
 >>>>>>> 1208a8f3 (store attrs as metadata tags)
 import io.cryostat.core.FlightRecorderException;
+=======
+>>>>>>> 18935e67 (implement more suitable interface)
 import io.cryostat.core.templates.MutableTemplateService.InvalidEventTemplateException;
 import io.cryostat.core.templates.MutableTemplateService.InvalidXmlException;
 import io.cryostat.core.templates.Template;
-import io.cryostat.core.templates.TemplateService;
 import io.cryostat.core.templates.TemplateType;
 import io.cryostat.util.HttpStatusCodeIdentifier;
 import io.cryostat.ws.MessagingServer;
@@ -159,7 +160,7 @@ import software.amazon.awssdk.services.s3.model.Tag;
 import software.amazon.awssdk.services.s3.model.Tagging;
 
 @ApplicationScoped
-class S3TemplateService implements TemplateService {
+class S3TemplateService implements MutableTemplateService {
 
     static final String EVENT_TEMPLATE_CREATED = "TemplateUploaded";
     static final String EVENT_TEMPLATE_DELETED = "TemplateDeleted";
@@ -459,10 +460,14 @@ class S3TemplateService implements TemplateService {
     @Blocking
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 18935e67 (implement more suitable interface)
     @Override
     public Template addTemplate(InputStream stream)
             throws InvalidXmlException, InvalidEventTemplateException, IOException {
         try (stream) {
+<<<<<<< HEAD
             XMLModel model = parseXml(stream);
 =======
                     // throw new InvalidEventTemplateException(result.getText());
@@ -489,6 +494,8 @@ class S3TemplateService implements TemplateService {
 >>>>>>> af9dee6c (tmp)
 =======
         try (var stream = new ByteArrayInputStream(templateText.getBytes(StandardCharsets.UTF_8))) {
+=======
+>>>>>>> 18935e67 (implement more suitable interface)
             XMLModel model = parseXml(stream);
 >>>>>>> e6b1f842 (refactor cleanup)
 
@@ -566,6 +573,7 @@ class S3TemplateService implements TemplateService {
 
     @Blocking
 <<<<<<< HEAD
+<<<<<<< HEAD
     @Override
     public void deleteTemplate(String templateName) {
         try {
@@ -585,6 +593,10 @@ class S3TemplateService implements TemplateService {
         }
 =======
     void removeTemplate(String templateName) {
+=======
+    @Override
+    public void deleteTemplate(String templateName) {
+>>>>>>> 18935e67 (implement more suitable interface)
         var req =
                 DeleteObjectRequest.builder()
                         .bucket(eventTemplatesBucket)
