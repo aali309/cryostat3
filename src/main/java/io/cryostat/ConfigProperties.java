@@ -18,11 +18,15 @@ package io.cryostat;
 public class ConfigProperties {
     public static final String AWS_BUCKET_NAME_ARCHIVES = "storage.buckets.archives.name";
 <<<<<<< HEAD
+<<<<<<< HEAD
     public static final String AWS_BUCKET_NAME_EVENT_TEMPLATES =
             "storage.buckets.event-templates.name";
 =======
     public static final String AWS_EVENT_TEMPLATE_NAME = "storage.buckets.event-templates.name";
 >>>>>>> a07df122 (tmp)
+=======
+    public static final String AWS_BUCKET_NAME_EVENT_TEMPLATES = "storage.buckets.event-templates.name";
+>>>>>>> 2b420223 (rename constant)
     public static final String AWS_OBJECT_EXPIRATION_LABELS =
             "storage.buckets.archives.expiration-label";
 
