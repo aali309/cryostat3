@@ -276,6 +276,7 @@ public class EventTemplates {
     }
 
     @GET
+<<<<<<< HEAD
     @Path("/api/v2.1/targets/{connectUrl}/templates/{templateName}/type/{templateType}")
     @RolesAllowed("read")
 <<<<<<< HEAD
@@ -304,6 +305,8 @@ public class EventTemplates {
 
     @GET
     @Blocking
+=======
+>>>>>>> 44d05132 (add endpoint for listing only custom templates)
     @Path("/api/v3/event_templates")
     @RolesAllowed("read")
     public List<Template> listTemplates() throws Exception {
@@ -314,7 +317,10 @@ public class EventTemplates {
     }
 
     @GET
+<<<<<<< HEAD
     @Blocking
+=======
+>>>>>>> 44d05132 (add endpoint for listing only custom templates)
     @Path("/api/v3/targets/{id}/event_templates")
     @RolesAllowed("read")
     public List<Template> listTargetTemplates(@RestPath long id) throws Exception {
