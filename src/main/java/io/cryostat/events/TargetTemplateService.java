@@ -28,11 +28,15 @@ import io.cryostat.core.templates.TemplateType;
 import io.cryostat.targets.Target;
 import io.cryostat.targets.TargetConnectionManager;
 
+<<<<<<< HEAD
 import io.smallrye.common.annotation.Blocking;
+=======
+>>>>>>> f17134c2 (extract target templates service to separate class)
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.jsoup.nodes.Document;
 
+<<<<<<< HEAD
 public class TargetTemplateService implements TemplateService {
 
     @ApplicationScoped
@@ -40,6 +44,15 @@ public class TargetTemplateService implements TemplateService {
         @Inject TargetConnectionManager connectionManager;
 
         public TargetTemplateService create(Target target) {
+=======
+class TargetTemplateService implements TemplateService {
+
+    @ApplicationScoped
+    static class Factory {
+        @Inject TargetConnectionManager connectionManager;
+
+        TargetTemplateService create(Target target) {
+>>>>>>> f17134c2 (extract target templates service to separate class)
             return new TargetTemplateService(connectionManager, target);
         }
     }
@@ -47,13 +60,20 @@ public class TargetTemplateService implements TemplateService {
     private final TargetConnectionManager connectionManager;
     private final Target target;
 
+<<<<<<< HEAD
     private TargetTemplateService(TargetConnectionManager connectionManager, Target target) {
+=======
+    public TargetTemplateService(TargetConnectionManager connectionManager, Target target) {
+>>>>>>> f17134c2 (extract target templates service to separate class)
         this.connectionManager = connectionManager;
         this.target = target;
     }
 
     @Override
+<<<<<<< HEAD
     @Blocking
+=======
+>>>>>>> f17134c2 (extract target templates service to separate class)
     public List<Template> getTemplates() throws FlightRecorderException {
         return connectionManager.executeConnectedTask(
                 target,
@@ -64,7 +84,10 @@ public class TargetTemplateService implements TemplateService {
     }
 
     @Override
+<<<<<<< HEAD
     @Blocking
+=======
+>>>>>>> f17134c2 (extract target templates service to separate class)
     public Optional<Document> getXml(String templateName, TemplateType unused)
             throws FlightRecorderException {
         return connectionManager.executeConnectedTask(
@@ -73,7 +96,10 @@ public class TargetTemplateService implements TemplateService {
     }
 
     @Override
+<<<<<<< HEAD
     @Blocking
+=======
+>>>>>>> f17134c2 (extract target templates service to separate class)
     public Optional<IConstrainedMap<EventOptionID>> getEvents(
             String templateName, TemplateType unused) throws FlightRecorderException {
         return connectionManager.executeConnectedTask(
