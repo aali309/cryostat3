@@ -279,6 +279,7 @@ class S3TemplateService implements TemplateService {
             for (XMLValidationResult result : model.getResults()) {
                 if (result.isError()) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                     throw new IllegalArgumentException(
                             new InvalidEventTemplateException(result.getText()));
                 }
@@ -296,6 +297,10 @@ class S3TemplateService implements TemplateService {
 =======
                     // throw new InvalidEventTemplateException(result.getText());
                     throw new IllegalArgumentException(result.getText());
+=======
+                    throw new IllegalArgumentException(
+                            new InvalidEventTemplateException(result.getText()));
+>>>>>>> c6897aea (cleanup)
                 }
             }
 >>>>>>> f1bce2df (refactor, split out custom event templates service)
@@ -311,6 +316,7 @@ class S3TemplateService implements TemplateService {
 
             if (labelAttr == null) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 throw new IllegalArgumentException(
                         new InvalidEventTemplateException(
                                 "Template has no configuration label attribute"));
@@ -321,6 +327,11 @@ class S3TemplateService implements TemplateService {
                 // throw new InvalidEventTemplateException(
                 //         "Template has no configuration label attribute");
                 throw new IllegalArgumentException("Template has no configuration label attribute");
+=======
+                throw new IllegalArgumentException(
+                        new InvalidEventTemplateException(
+                                "Template has no configuration label attribute"));
+>>>>>>> c6897aea (cleanup)
             }
 
             String templateName = labelAttr.getExplicitValue();
@@ -418,11 +429,11 @@ class S3TemplateService implements TemplateService {
                     getAttributeValue(root, "provider"),
                     TemplateType.CUSTOM);
         } catch (IOException ioe) {
+            // FIXME InvalidXmlException constructor should be made public in -core
             // throw new InvalidXmlException("Unable to parse XML stream", ioe);
             throw new IllegalArgumentException("Unable to parse XML stream", ioe);
         } catch (ParseException | IllegalArgumentException e) {
-            // throw new InvalidEventTemplateException("Invalid XML", e);
-            throw new IllegalArgumentException("Invalid XML", e);
+            throw new IllegalArgumentException(new InvalidEventTemplateException("Invalid XML", e));
         }
     }
 
