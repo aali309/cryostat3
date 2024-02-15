@@ -53,11 +53,14 @@ import io.cryostat.core.templates.Template;
 import io.cryostat.core.templates.TemplateType;
 import io.cryostat.targets.Target;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import io.cryostat.util.HttpMimeType;
 
 import io.smallrye.common.annotation.Blocking;
 =======
 import io.cryostat.targets.TargetConnectionManager;
+=======
+>>>>>>> f17134c2 (extract target templates service to separate class)
 
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.Vertx;
@@ -65,12 +68,16 @@ import io.vertx.core.Vertx;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
+<<<<<<< HEAD
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 <<<<<<< HEAD
 =======
 import jakarta.ws.rs.NotFoundException;
 >>>>>>> 3d3534db (feat(eventtemplates): custom event templates in S3)
+=======
+import jakarta.ws.rs.GET;
+>>>>>>> f17134c2 (extract target templates service to separate class)
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.HttpHeaders;
@@ -129,10 +136,11 @@ public class EventTemplates {
     @Inject Logger logger;
 =======
     @Inject Vertx vertx;
-    @Inject TargetConnectionManager connectionManager;
+    @Inject TargetTemplateService.Factory targetTemplateServiceFactory;
     @Inject S3TemplateService customTemplateService;
     @Inject Logger logger;
 
+<<<<<<< HEAD
     @ConfigProperty(name = ConfigProperties.AWS_BUCKET_NAME_EVENT_TEMPLATES)
     String eventTemplatesBucket;
 
@@ -166,6 +174,8 @@ public class EventTemplates {
 
 =======
 >>>>>>> f1bce2df (refactor, split out custom event templates service)
+=======
+>>>>>>> f17134c2 (extract target templates service to separate class)
     @GET
     @Path("/api/v1/targets/{connectUrl}/templates")
     @RolesAllowed("read")
@@ -261,6 +271,7 @@ public class EventTemplates {
     @GET
     @Path("/api/v2.1/targets/{connectUrl}/templates/{templateName}/type/{templateType}")
     @RolesAllowed("read")
+<<<<<<< HEAD
     public Response getTargetTemplateV2_1(
             @RestPath URI connectUrl,
             @RestPath String templateName,
@@ -273,6 +284,15 @@ public class EventTemplates {
                                         "/api/v3/targets/%d/event_templates/%s/%s",
                                         target.id, templateType, templateName)))
                 .build();
+=======
+    public List<Template> listTemplates(@RestPath long id) throws Exception {
+        Target target = Target.find("id", id).singleResult();
+        var list = new ArrayList<Template>();
+        list.add(ALL_EVENTS_TEMPLATE);
+        list.addAll(targetTemplateServiceFactory.create(target).getTemplates());
+        list.addAll(customTemplateService.getTemplates());
+        return list;
+>>>>>>> f17134c2 (extract target templates service to separate class)
     }
 
     @GET
@@ -307,6 +327,7 @@ public class EventTemplates {
             @RestPath long id, @RestPath TemplateType templateType, @RestPath String templateName)
             throws Exception {
         Target target = Target.find("id", id).singleResult();
+<<<<<<< HEAD
         Document doc;
         switch (templateType) {
             case TARGET:
@@ -326,5 +347,18 @@ public class EventTemplates {
                 .header(HttpHeaders.CONTENT_TYPE, HttpMimeType.JFC.mime())
                 .entity(doc.toString())
                 .build();
+=======
+        switch (templateType) {
+            case TARGET:
+                return targetTemplateServiceFactory
+                        .create(target)
+                        .getXml(templateName, templateType)
+                        .toString();
+            case CUSTOM:
+                return customTemplateService.getXml(templateName, templateType).toString();
+            default:
+                throw new BadRequestException();
+        }
+>>>>>>> f17134c2 (extract target templates service to separate class)
     }
 }
