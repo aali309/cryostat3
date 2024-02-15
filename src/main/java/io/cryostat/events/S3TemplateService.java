@@ -185,6 +185,7 @@ public class S3TemplateService implements MutableTemplateService {
 
     @Override
 <<<<<<< HEAD
+<<<<<<< HEAD
     @Blocking
     public Optional<IConstrainedMap<EventOptionID>> getEvents(
             String templateName, TemplateType unused) throws FlightRecorderException {
@@ -290,6 +291,9 @@ public class S3TemplateService implements MutableTemplateService {
         try (inputStream) {
             var model = EventConfiguration.createModel(inputStream);
 =======
+=======
+    @Blocking
+>>>>>>> 40f02da6 (update blocking annotations, make some methods private)
     public Optional<IConstrainedMap<EventOptionID>> getEvents(
             String templateName, TemplateType unused) throws FlightRecorderException {
         try (var stream = getModel(templateName)) {
@@ -305,6 +309,7 @@ public class S3TemplateService implements MutableTemplateService {
     }
 
     @Override
+    @Blocking
     public List<Template> getTemplates() throws FlightRecorderException {
 <<<<<<< HEAD
         return convertObjects(getObjects());
@@ -369,6 +374,7 @@ public class S3TemplateService implements MutableTemplateService {
     }
 
     @Override
+    @Blocking
     public Optional<Document> getXml(String templateName, TemplateType unused)
             throws FlightRecorderException {
         try (var stream = getModel(templateName)) {

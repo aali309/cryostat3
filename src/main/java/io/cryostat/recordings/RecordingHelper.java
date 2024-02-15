@@ -400,11 +400,15 @@ public class RecordingHelper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     @Blocking
 =======
 >>>>>>> 085c6332 (enable retrieval of custom event templates for creating recordings)
 =======
 >>>>>>> deca4abd (Reapply "enable retrieval of custom event templates for creating recordings")
+=======
+    @Blocking
+>>>>>>> 40f02da6 (update blocking annotations, make some methods private)
     private IConstrainedMap<EventOptionID> enableAllEvents(Target target) throws Exception {
         return connectionManager.executeConnectedTask(
                 target,
@@ -429,6 +433,7 @@ public class RecordingHelper {
                 });
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     @Blocking
     private IConstrainedMap<EventOptionID> enableEvents(Target target, Template eventTemplate)
@@ -501,6 +506,10 @@ public class RecordingHelper {
         }
 =======
     public IConstrainedMap<EventOptionID> enableEvents(
+=======
+    @Blocking
+    private IConstrainedMap<EventOptionID> enableEvents(
+>>>>>>> 40f02da6 (update blocking annotations, make some methods private)
             Target target, String templateName, TemplateType templateType) throws Exception {
         if (templateName.equals("ALL")) {
             return enableAllEvents(target);
@@ -520,7 +529,8 @@ public class RecordingHelper {
         }
     }
 
-    public TemplateType getPreferredTemplateType(
+    @Blocking
+    private TemplateType getPreferredTemplateType(
             Target target, String templateName, TemplateType templateType) throws Exception {
         // if template type not specified, try to find a Custom template by that name. If none,
         // fall back on finding a Target built-in template by the name. If not, throw an
