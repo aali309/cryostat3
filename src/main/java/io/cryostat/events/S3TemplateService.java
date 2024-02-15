@@ -148,6 +148,7 @@ import org.jsoup.parser.Parser;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectTaggingRequest;
 import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
@@ -160,8 +161,8 @@ import software.amazon.awssdk.services.s3.model.Tagging;
 @ApplicationScoped
 class S3TemplateService implements TemplateService {
 
-    public static final String EVENT_TEMPLATE_CREATED = "TemplateUploaded";
-    public static final String EVENT_TEMPLATE_DELETED = "TemplateDeleted";
+    static final String EVENT_TEMPLATE_CREATED = "TemplateUploaded";
+    static final String EVENT_TEMPLATE_DELETED = "TemplateDeleted";
 
     @Inject S3Client storage;
 <<<<<<< HEAD
@@ -457,6 +458,7 @@ class S3TemplateService implements TemplateService {
 
     @Blocking
 <<<<<<< HEAD
+<<<<<<< HEAD
     @Override
     public Template addTemplate(InputStream stream)
             throws InvalidXmlException, InvalidEventTemplateException, IOException {
@@ -474,6 +476,9 @@ class S3TemplateService implements TemplateService {
 >>>>>>> f1bce2df (refactor, split out custom event templates service)
 =======
     public Template addTemplate(String templateText)
+=======
+    Template addTemplate(String templateText)
+>>>>>>> a786557a (implement DELETE custom template)
             throws InvalidXmlException, InvalidEventTemplateException, IOException {
 <<<<<<< HEAD
         try {
@@ -541,10 +546,14 @@ class S3TemplateService implements TemplateService {
             bus.publish(
                     MessagingServer.class.getName(),
 <<<<<<< HEAD
+<<<<<<< HEAD
                     new Notification(EVENT_TEMPLATE_CREATED, Map.of("template", template)));
 =======
                     new Notification(EVENT_TEMPLATE_CREATED, template));
 >>>>>>> a1cad030 (publish notification on template upload)
+=======
+                    new Notification(EVENT_TEMPLATE_CREATED, Map.of("template", template)));
+>>>>>>> a786557a (implement DELETE custom template)
             return template;
         } catch (IOException ioe) {
             // FIXME InvalidXmlException constructor should be made public in -core
@@ -556,6 +565,7 @@ class S3TemplateService implements TemplateService {
     }
 
     @Blocking
+<<<<<<< HEAD
     @Override
     public void deleteTemplate(String templateName) {
         try {
@@ -573,6 +583,19 @@ class S3TemplateService implements TemplateService {
         } catch (FlightRecorderException e) {
             logger.error(e);
         }
+=======
+    void removeTemplate(String templateName) {
+        var req =
+                DeleteObjectRequest.builder()
+                        .bucket(eventTemplatesBucket)
+                        .key(templateName)
+                        .build();
+        storage.deleteObject(req);
+        bus.publish(
+                MessagingServer.class.getName(),
+                new Notification(
+                        EVENT_TEMPLATE_DELETED, Map.of("template", Map.of("name", templateName))));
+>>>>>>> a786557a (implement DELETE custom template)
     }
 
     private Tagging createTemplateTagging(

@@ -65,6 +65,7 @@ import io.cryostat.targets.TargetConnectionManager;
 =======
 >>>>>>> f17134c2 (extract target templates service to separate class)
 
+import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.Vertx;
 >>>>>>> 3d3534db (feat(eventtemplates): custom event templates in S3)
@@ -72,6 +73,9 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a786557a (implement DELETE custom template)
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 <<<<<<< HEAD
@@ -194,8 +198,10 @@ public class EventTemplates {
     }
 
     @POST
+    @Blocking
     @Path("/api/v1/templates")
     @RolesAllowed("write")
+<<<<<<< HEAD
 <<<<<<< HEAD
     public Response postTemplatesV1(@RestForm("template") FileUpload body) {
         return Response.status(RestResponse.Status.PERMANENT_REDIRECT)
@@ -234,6 +240,9 @@ public class EventTemplates {
         customTemplateService.deleteTemplate(templateName);
 =======
     public Uni<Void> postTemplatesV1(@RestForm("template") FileUpload body) throws Exception {
+=======
+    public Uni<Void> postTemplatesV1(@RestForm("template") FileUpload body) {
+>>>>>>> a786557a (implement DELETE custom template)
         // FIXME this should redirect to a POST /api/v3/event_templates
         CompletableFuture<Void> cf = new CompletableFuture<>();
         var path = body.filePath();
@@ -256,6 +265,13 @@ public class EventTemplates {
                         });
         return Uni.createFrom().future(cf);
 >>>>>>> 3d3534db (feat(eventtemplates): custom event templates in S3)
+    }
+
+    @DELETE
+    @Path("/api/v1/templates/{templateName}")
+    @RolesAllowed("write")
+    public void deleteTemplatesV1(@RestPath String templateName) {
+        customTemplateService.removeTemplate(templateName);
     }
 
     @GET
