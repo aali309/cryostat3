@@ -21,7 +21,11 @@ services:
     environment:
       MINIO_ROOT_USER: minioroot
       MINIO_ROOT_PASSWORD: minioroot
+<<<<<<< HEAD:compose/s3-minio.yml
       MINIO_DEFAULT_BUCKETS: ${PRECREATE_BUCKETS}
+=======
+      MINIO_DEFAULT_BUCKETS: archivedrecordings,archivedreports,eventtemplates
+>>>>>>> 611684f8 (pre-create event templates bucket):smoketest/compose/s3-minio.yml
     volumes:
       - minio_data:/data
       - minio_certs:/certs

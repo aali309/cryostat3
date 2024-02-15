@@ -17,7 +17,11 @@ services:
     image: ${STORAGE_IMAGE:-quay.io/cryostat/cryostat-storage:latest}
     hostname: s3
     environment:
+<<<<<<< HEAD:compose/s3-seaweed.yml
       CRYOSTAT_BUCKETS: ${PRECREATE_BUCKETS}
+=======
+      CRYOSTAT_BUCKETS: archivedrecordings,archivedreports,eventtemplates
+>>>>>>> 611684f8 (pre-create event templates bucket):smoketest/compose/s3-seaweed.yml
       CRYOSTAT_ACCESS_KEY: access_key
       CRYOSTAT_SECRET_KEY: secret_key
       DATA_DIR: /data
