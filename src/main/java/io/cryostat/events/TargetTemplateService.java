@@ -61,10 +61,14 @@ class TargetTemplateService implements TemplateService {
     private final Target target;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     private TargetTemplateService(TargetConnectionManager connectionManager, Target target) {
 =======
     public TargetTemplateService(TargetConnectionManager connectionManager, Target target) {
 >>>>>>> f17134c2 (extract target templates service to separate class)
+=======
+    private TargetTemplateService(TargetConnectionManager connectionManager, Target target) {
+>>>>>>> 369ba3f6 (make constructor private)
         this.connectionManager = connectionManager;
         this.target = target;
     }
