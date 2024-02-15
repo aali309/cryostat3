@@ -24,6 +24,7 @@ import java.util.concurrent.CompletableFuture;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import io.cryostat.core.sys.FileSystem;
 =======
 =======
@@ -49,6 +50,8 @@ import io.cryostat.core.templates.MutableTemplateService.InvalidXmlException;
 =======
 >>>>>>> f1bce2df (refactor, split out custom event templates service)
 import io.cryostat.ConfigProperties;
+=======
+>>>>>>> c6897aea (cleanup)
 import io.cryostat.core.templates.Template;
 import io.cryostat.core.templates.TemplateType;
 import io.cryostat.targets.Target;
@@ -85,6 +88,7 @@ import jakarta.ws.rs.core.Response;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.RestForm;
 import org.jboss.resteasy.reactive.RestPath;
@@ -99,6 +103,8 @@ import org.apache.hc.core5.http.ContentType;
 =======
 >>>>>>> f1bce2df (refactor, split out custom event templates service)
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+=======
+>>>>>>> c6897aea (cleanup)
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.RestForm;
 import org.jboss.resteasy.reactive.RestPath;
