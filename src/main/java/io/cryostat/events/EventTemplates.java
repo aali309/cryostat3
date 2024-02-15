@@ -321,9 +321,14 @@ public class EventTemplates {
     @GET
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     @Path("/api/v2.1/targets/{connectUrl}/templates/{templateName}/type/{templateType}")
     @RolesAllowed("read")
 <<<<<<< HEAD
+=======
+    @Path("/api/v2.1/targets/{connectUrl}/templates/{templateName}/type/{templateType}")
+    @RolesAllowed("read")
+>>>>>>> 4fada054 (add API v2.1 redirecting handler)
     public Response getTargetTemplateV2_1(
             @RestPath URI connectUrl,
             @RestPath String templateName,
@@ -336,6 +341,7 @@ public class EventTemplates {
                                         "/api/v3/targets/%d/event_templates/%s/%s",
                                         target.id, templateType, templateName)))
                 .build();
+<<<<<<< HEAD
 =======
     public List<Template> listTemplates(@RestPath long id) throws Exception {
         Target target = Target.find("id", id).singleResult();
@@ -345,6 +351,8 @@ public class EventTemplates {
         list.addAll(customTemplateService.getTemplates());
         return list;
 >>>>>>> f17134c2 (extract target templates service to separate class)
+=======
+>>>>>>> 4fada054 (add API v2.1 redirecting handler)
     }
 
     @GET
