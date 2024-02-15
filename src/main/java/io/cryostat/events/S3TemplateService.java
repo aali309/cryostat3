@@ -282,24 +282,21 @@ class S3TemplateService implements TemplateService {
 =======
     public Optional<IConstrainedMap<EventOptionID>> getEvents(
             String templateName, TemplateType unused) throws FlightRecorderException {
-        return getObject(templateName)
-                .map(this::getContents)
-                .map(
-                        stream -> {
-                            try {
-                                return new EventConfiguration(parseXml(stream))
-                                        .getEventOptions(
-                                                new SimpleConstrainedMap<>(
-                                                        UnitLookup.PLAIN_TEXT.getPersister()));
-                            } catch (IOException | ParseException e) {
-                                logger.error(e);
-                                return null;
-                            }
-                        });
+        try (var stream = getModel(templateName)) {
+            return Optional.of(
+                    new EventConfiguration(parseXml(stream))
+                            .getEventOptions(
+                                    new SimpleConstrainedMap<>(
+                                            UnitLookup.PLAIN_TEXT.getPersister())));
+        } catch (IOException | ParseException e) {
+            logger.error(e);
+            return Optional.empty();
+        }
     }
 
     @Override
     public List<Template> getTemplates() throws FlightRecorderException {
+<<<<<<< HEAD
         return convertObjects(getObjects());
     }
 
@@ -345,6 +342,9 @@ class S3TemplateService implements TemplateService {
 
     private List<Template> convertObjects(List<S3Object> objects) {
         return objects.stream()
+=======
+        return getObjects().stream()
+>>>>>>> e6b1f842 (refactor cleanup)
                 .map(
                         t -> {
                             try {
@@ -354,9 +354,30 @@ class S3TemplateService implements TemplateService {
                                 return null;
                             }
                         })
+                .filter(Objects::nonNull)
                 .toList();
     }
 
+    @Override
+    public Optional<Document> getXml(String templateName, TemplateType unused)
+            throws FlightRecorderException {
+        try (var stream = getModel(templateName)) {
+            Document doc =
+                    Jsoup.parse(stream, StandardCharsets.UTF_8.name(), "", Parser.xmlParser());
+            return Optional.of(doc);
+        } catch (IOException e) {
+            logger.error(e);
+            return Optional.empty();
+        }
+    }
+
+    @Blocking
+    private List<S3Object> getObjects() {
+        var builder = ListObjectsV2Request.builder().bucket(eventTemplatesBucket);
+        return storage.listObjectsV2(builder.build()).contents();
+    }
+
+    @Blocking
     private Template convertObject(S3Object object) throws InvalidEventTemplateException {
         var req =
                 GetObjectTaggingRequest.builder()
@@ -402,8 +423,8 @@ class S3TemplateService implements TemplateService {
     }
 
     @Blocking
-    private InputStream getContents(S3Object object) {
-        var req = GetObjectRequest.builder().bucket(eventTemplatesBucket).key(object.key()).build();
+    private InputStream getModel(String name) {
+        var req = GetObjectRequest.builder().bucket(eventTemplatesBucket).key(name).build();
         return storage.getObject(req);
     }
 
@@ -446,12 +467,17 @@ class S3TemplateService implements TemplateService {
 =======
     public Template addTemplate(String templateText)
             throws InvalidXmlException, InvalidEventTemplateException, IOException {
+<<<<<<< HEAD
         try {
             XMLModel model =
                     parseXml(
                             new ByteArrayInputStream(
                                     templateText.getBytes(StandardCharsets.UTF_8)));
 >>>>>>> af9dee6c (tmp)
+=======
+        try (var stream = new ByteArrayInputStream(templateText.getBytes(StandardCharsets.UTF_8))) {
+            XMLModel model = parseXml(stream);
+>>>>>>> e6b1f842 (refactor cleanup)
 
             XMLTagInstance configuration = model.getRoot();
             XMLAttributeInstance labelAttr = null;
