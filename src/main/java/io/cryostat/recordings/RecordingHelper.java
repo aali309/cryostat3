@@ -56,9 +56,11 @@ import io.cryostat.core.FlightRecorderException;
 import io.cryostat.core.net.JFRConnection;
 import io.cryostat.core.sys.Clock;
 import io.cryostat.core.sys.FileSystem;
-import io.cryostat.core.templates.Template;
 import io.cryostat.core.templates.TemplateType;
+<<<<<<< HEAD
 import io.cryostat.events.EventTemplates;
+=======
+>>>>>>> 085c6332 (enable retrieval of custom event templates for creating recordings)
 import io.cryostat.events.S3TemplateService;
 import io.cryostat.events.TargetTemplateService;
 import io.cryostat.recordings.ActiveRecording.Listener.ActiveRecordingEvent;
@@ -204,6 +206,11 @@ public class RecordingHelper {
             JFRConnection connection)
             throws Exception {
         String recordingName = (String) recordingOptions.get(RecordingOptionsBuilder.KEY_NAME);
+<<<<<<< HEAD
+=======
+        TemplateType preferredTemplateType =
+                getPreferredTemplateType(target, templateName, templateType);
+>>>>>>> 085c6332 (enable retrieval of custom event templates for creating recordings)
         getDescriptorByName(connection, recordingName)
                 .ifPresent(
                         previous -> {
@@ -223,7 +230,13 @@ public class RecordingHelper {
         IRecordingDescriptor desc =
                 connection
                         .getService()
+<<<<<<< HEAD
                         .start(recordingOptions, enableEvents(target, eventTemplate));
+=======
+                        .start(
+                                recordingOptions,
+                                enableEvents(target, templateName, preferredTemplateType));
+>>>>>>> 085c6332 (enable retrieval of custom event templates for creating recordings)
 
         Map<String, String> labels = metadata.labels();
         labels.put("template.name", eventTemplate.getName());
@@ -360,7 +373,10 @@ public class RecordingHelper {
         throw new BadRequestException(eventSpecifier);
     }
 
+<<<<<<< HEAD
     @Blocking
+=======
+>>>>>>> 085c6332 (enable retrieval of custom event templates for creating recordings)
     private IConstrainedMap<EventOptionID> enableAllEvents(Target target) throws Exception {
         return connectionManager.executeConnectedTask(
                 target,
@@ -377,6 +393,7 @@ public class RecordingHelper {
                 });
     }
 
+<<<<<<< HEAD
     @Blocking
     private IConstrainedMap<EventOptionID> enableEvents(Target target, Template eventTemplate)
             throws Exception {
@@ -446,6 +463,46 @@ public class RecordingHelper {
                                                         "Invalid/unknown event template %s",
                                                         templateName)));
         }
+=======
+    public IConstrainedMap<EventOptionID> enableEvents(
+            Target target, String templateName, TemplateType templateType) throws Exception {
+        if (templateName.equals("ALL")) {
+            return enableAllEvents(target);
+        }
+        TemplateType type = getPreferredTemplateType(target, templateName, templateType);
+        switch (type) {
+            case TARGET:
+                return targetTemplateServiceFactory
+                        .create(target)
+                        .getEvents(templateName, type)
+                        .orElseThrow();
+            case CUSTOM:
+                return customTemplateService.getEvents(templateName, templateType).orElseThrow();
+            default:
+                throw new BadRequestException(
+                        String.format("Invalid/unknown event template %s", templateName));
+        }
+    }
+
+    public TemplateType getPreferredTemplateType(
+            Target target, String templateName, TemplateType templateType) throws Exception {
+        // if template type not specified, try to find a Custom template by that name. If none,
+        // fall back on finding a Target built-in template by the name. If not, throw an
+        // exception and bail out.
+        if (templateType != null) {
+            return templateType;
+        }
+        if (customTemplateService.getTemplates().stream()
+                .anyMatch(t -> t.getName().equals(templateName))) {
+            return TemplateType.CUSTOM;
+        }
+        if (targetTemplateServiceFactory.create(target).getTemplates().stream()
+                .anyMatch(t -> t.getName().equals(templateName))) {
+            return TemplateType.TARGET;
+        }
+        throw new BadRequestException(
+                String.format("Invalid/unknown event template %s", templateName));
+>>>>>>> 085c6332 (enable retrieval of custom event templates for creating recordings)
     }
 
     static Optional<IRecordingDescriptor> getDescriptorById(
