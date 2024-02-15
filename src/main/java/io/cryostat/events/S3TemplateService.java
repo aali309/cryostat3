@@ -127,9 +127,12 @@ import io.cryostat.core.templates.Template;
 import io.cryostat.core.templates.TemplateService;
 import io.cryostat.core.templates.TemplateType;
 import io.cryostat.util.HttpStatusCodeIdentifier;
+import io.cryostat.ws.MessagingServer;
+import io.cryostat.ws.Notification;
 
 import io.quarkus.runtime.StartupEvent;
 import io.smallrye.common.annotation.Blocking;
+import io.vertx.core.eventbus.EventBus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
@@ -157,10 +160,15 @@ import software.amazon.awssdk.services.s3.model.Tagging;
 @ApplicationScoped
 class S3TemplateService implements TemplateService {
 
+    public static final String EVENT_TEMPLATE_CREATED = "TemplateUploaded";
+    public static final String EVENT_TEMPLATE_DELETED = "TemplateDeleted";
+
     @Inject S3Client storage;
 <<<<<<< HEAD
 >>>>>>> f1bce2df (refactor, split out custom event templates service)
 =======
+
+    @Inject EventBus bus;
 
     @Inject
     @Named(Producers.BASE64_URL)
@@ -532,7 +540,11 @@ class S3TemplateService implements TemplateService {
             var template = new Template(templateName, description, provider, TemplateType.CUSTOM);
             bus.publish(
                     MessagingServer.class.getName(),
+<<<<<<< HEAD
                     new Notification(EVENT_TEMPLATE_CREATED, Map.of("template", template)));
+=======
+                    new Notification(EVENT_TEMPLATE_CREATED, template));
+>>>>>>> a1cad030 (publish notification on template upload)
             return template;
         } catch (IOException ioe) {
             // FIXME InvalidXmlException constructor should be made public in -core
