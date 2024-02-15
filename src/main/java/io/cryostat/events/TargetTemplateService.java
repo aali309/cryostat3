@@ -29,9 +29,13 @@ import io.cryostat.targets.Target;
 import io.cryostat.targets.TargetConnectionManager;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import io.smallrye.common.annotation.Blocking;
 =======
 >>>>>>> f17134c2 (extract target templates service to separate class)
+=======
+import io.smallrye.common.annotation.Blocking;
+>>>>>>> 40f02da6 (update blocking annotations, make some methods private)
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.jsoup.nodes.Document;
@@ -99,9 +103,13 @@ public class TargetTemplateService implements TemplateService {
 
     @Override
 <<<<<<< HEAD
+<<<<<<< HEAD
     @Blocking
 =======
 >>>>>>> f17134c2 (extract target templates service to separate class)
+=======
+    @Blocking
+>>>>>>> 40f02da6 (update blocking annotations, make some methods private)
     public List<Template> getTemplates() throws FlightRecorderException {
         return connectionManager.executeConnectedTask(
                 target,
@@ -113,9 +121,13 @@ public class TargetTemplateService implements TemplateService {
 
     @Override
 <<<<<<< HEAD
+<<<<<<< HEAD
     @Blocking
 =======
 >>>>>>> f17134c2 (extract target templates service to separate class)
+=======
+    @Blocking
+>>>>>>> 40f02da6 (update blocking annotations, make some methods private)
     public Optional<Document> getXml(String templateName, TemplateType unused)
             throws FlightRecorderException {
         return connectionManager.executeConnectedTask(
@@ -125,9 +137,13 @@ public class TargetTemplateService implements TemplateService {
 
     @Override
 <<<<<<< HEAD
+<<<<<<< HEAD
     @Blocking
 =======
 >>>>>>> f17134c2 (extract target templates service to separate class)
+=======
+    @Blocking
+>>>>>>> 40f02da6 (update blocking annotations, make some methods private)
     public Optional<IConstrainedMap<EventOptionID>> getEvents(
             String templateName, TemplateType unused) throws FlightRecorderException {
         return connectionManager.executeConnectedTask(
