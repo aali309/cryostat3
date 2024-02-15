@@ -38,12 +38,17 @@ import org.jsoup.nodes.Document;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 public class TargetTemplateService implements TemplateService {
+=======
+class TargetTemplateService implements TemplateService {
+>>>>>>> 04614ae5 (Revert "enable retrieval of custom event templates for creating recordings")
 
     @ApplicationScoped
-    public static class Factory {
+    static class Factory {
         @Inject TargetConnectionManager connectionManager;
 
+<<<<<<< HEAD
         public TargetTemplateService create(Target target) {
 =======
 class TargetTemplateService implements TemplateService {
@@ -61,6 +66,9 @@ public class TargetTemplateService implements TemplateService {
 =======
         public TargetTemplateService create(Target target) {
 >>>>>>> 085c6332 (enable retrieval of custom event templates for creating recordings)
+=======
+        TargetTemplateService create(Target target) {
+>>>>>>> 04614ae5 (Revert "enable retrieval of custom event templates for creating recordings")
             return new TargetTemplateService(connectionManager, target);
         }
     }
