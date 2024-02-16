@@ -601,6 +601,7 @@ public class S3TemplateService implements MutableTemplateService {
         } catch (FlightRecorderException e) {
             logger.error(e);
         }
+<<<<<<< HEAD
 =======
     void removeTemplate(String templateName) {
 =======
@@ -618,6 +619,8 @@ public class S3TemplateService implements MutableTemplateService {
                 new Notification(
                         EVENT_TEMPLATE_DELETED, Map.of("template", Map.of("name", templateName))));
 >>>>>>> a786557a (implement DELETE custom template)
+=======
+>>>>>>> 8a65cbe9 (better pre-delete checks, emit full template description on notification)
     }
 
     private Tagging createTemplateTagging(
