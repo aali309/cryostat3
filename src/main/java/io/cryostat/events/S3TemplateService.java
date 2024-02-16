@@ -539,8 +539,11 @@ public class S3TemplateService implements MutableTemplateService {
             }
 
             String templateName = labelAttr.getExplicitValue();
+<<<<<<< HEAD
             templateName = templateName.replaceAll("[\\W]+", "_");
 >>>>>>> f1bce2df (refactor, split out custom event templates service)
+=======
+>>>>>>> 28172cc5 (more work on test - loading resource not working)
 
             XMLTagInstance root = model.getRoot();
             root.setValue(JFCGrammar.ATTRIBUTE_LABEL_MANDATORY, templateName);
