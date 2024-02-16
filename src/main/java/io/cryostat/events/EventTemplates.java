@@ -59,6 +59,7 @@ import io.cryostat.core.templates.TemplateType;
 import io.cryostat.targets.Target;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import io.cryostat.util.HttpMimeType;
 
 import io.smallrye.common.annotation.Blocking;
@@ -66,6 +67,9 @@ import io.smallrye.common.annotation.Blocking;
 import io.cryostat.targets.TargetConnectionManager;
 =======
 >>>>>>> f17134c2 (extract target templates service to separate class)
+=======
+import io.cryostat.util.HttpMimeType;
+>>>>>>> 0362b06f (include content type on template download response)
 
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Uni;
@@ -101,6 +105,7 @@ import org.jboss.resteasy.reactive.RestPath;
 import org.jboss.resteasy.reactive.RestResponse;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import org.jsoup.nodes.Document;
+<<<<<<< HEAD
 =======
 import org.apache.http.entity.ContentType;
 =======
@@ -128,6 +133,8 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 >>>>>>> 3d3534db (feat(eventtemplates): custom event templates in S3)
 =======
 >>>>>>> f1bce2df (refactor, split out custom event templates service)
+=======
+>>>>>>> 0362b06f (include content type on template download response)
 
 @Path("")
 public class EventTemplates {
@@ -398,6 +405,7 @@ public class EventTemplates {
     @Path("/api/v3/targets/{id}/event_templates/{templateType}/{templateName}")
     @RolesAllowed("read")
     public Response getTargetTemplate(
+<<<<<<< HEAD
 =======
 =======
     @Blocking
@@ -430,18 +438,33 @@ public class EventTemplates {
                 .entity(doc.toString())
                 .build();
 =======
+=======
+            @RestPath long id, @RestPath TemplateType templateType, @RestPath String templateName)
+            throws Exception {
+        Target target = Target.find("id", id).singleResult();
+        Document doc;
+>>>>>>> 0362b06f (include content type on template download response)
         switch (templateType) {
             case TARGET:
-                return targetTemplateServiceFactory
-                        .create(target)
-                        .getXml(templateName, templateType)
-                        .get()
-                        .toString();
+                doc =
+                        targetTemplateServiceFactory
+                                .create(target)
+                                .getXml(templateName, templateType)
+                                .get();
+                break;
             case CUSTOM:
-                return customTemplateService.getXml(templateName, templateType).get().toString();
+                doc = customTemplateService.getXml(templateName, templateType).get();
+                break;
             default:
                 throw new BadRequestException();
         }
+<<<<<<< HEAD
 >>>>>>> f17134c2 (extract target templates service to separate class)
+=======
+        return Response.status(RestResponse.Status.OK)
+                .header(HttpHeaders.CONTENT_TYPE, HttpMimeType.JFC.mime())
+                .entity(doc.toString())
+                .build();
+>>>>>>> 0362b06f (include content type on template download response)
     }
 }
