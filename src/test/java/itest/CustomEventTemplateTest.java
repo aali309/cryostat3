@@ -28,6 +28,7 @@ import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.multipart.MultipartForm;
 import itest.bases.StandardSelfTest;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -41,6 +42,9 @@ public class CustomEventTemplateTest extends StandardSelfTest {
     static final String INVALID_TEMPLATE_FILE_NAME = "invalidTemplate.xml";
     static final String TEMPLATE_FILE_NAME = "CustomEventTemplate.jfc";
 =======
+=======
+import org.apache.http.client.utils.URLEncodedUtils;
+>>>>>>> 28172cc5 (more work on test - loading resource not working)
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -52,8 +56,12 @@ import org.junit.jupiter.api.Test;
 public class CustomEventTemplateTest extends StandardSelfTest {
 
     static final String INVALID_TEMPLATE_FILE_NAME = "invalidTemplate.xml";
+<<<<<<< HEAD
     static final String SANITIZE_TEMPLATE_FILE_NAME = "TemplateToSanitize.jfc";
 >>>>>>> 8a18f136 (working on test)
+=======
+    static final String TEMPLATE_FILE_NAME = "CustomEventTemplate.jfc";
+>>>>>>> 28172cc5 (more work on test - loading resource not working)
     static final String TEMPLATE_NAME = "invalidTemplate";
     static final String MEDIA_TYPE = "application/xml";
     static final String REQ_URL = "/api/v1/templates";
@@ -135,6 +143,7 @@ public class CustomEventTemplateTest extends StandardSelfTest {
 
     @Test
 <<<<<<< HEAD
+<<<<<<< HEAD
     public void testPostedTemplateNameIsSanitizedAndCanBeDeleted() throws Exception {
         ClassLoader classLoader = getClass().getClassLoader();
         try (var stream = classLoader.getResourceAsStream(TEMPLATE_FILE_NAME)) {
@@ -147,16 +156,18 @@ public class CustomEventTemplateTest extends StandardSelfTest {
             MatcherAssert.assertThat(postResp.statusCode(), Matchers.equalTo(204));
 =======
     public void testPostedTemplateIsSanitizedAndCanBeDeleted() throws Exception {
+=======
+    public void testPostedTemplateCanBeDeleted() throws Exception {
+>>>>>>> 28172cc5 (more work on test - loading resource not working)
         try {
             ClassLoader classLoader = getClass().getClassLoader();
-            File templateToSanitize =
-                    new File(classLoader.getResource(SANITIZE_TEMPLATE_FILE_NAME).getFile());
-            String path = templateToSanitize.getAbsolutePath();
+            File customEventTemplate =
+                    new File(classLoader.getResource(TEMPLATE_FILE_NAME).getFile());
+            String path = customEventTemplate.getAbsolutePath();
             MultipartForm form =
                     MultipartForm.create()
-                            .attribute("template", SANITIZE_TEMPLATE_FILE_NAME)
-                            .binaryFileUpload(
-                                    "template", SANITIZE_TEMPLATE_FILE_NAME, path, MEDIA_TYPE);
+                            .attribute("template", TEMPLATE_FILE_NAME)
+                            .binaryFileUpload("template", TEMPLATE_FILE_NAME, path, MEDIA_TYPE);
             HttpResponse<Buffer> postResp =
                     webClient.extensions().post(REQ_URL, form, REQUEST_TIMEOUT_SECONDS);
             MatcherAssert.assertThat(postResp.statusCode(), Matchers.equalTo(200));
@@ -194,14 +205,23 @@ public class CustomEventTemplateTest extends StandardSelfTest {
 =======
                 foundSanitizedTemplate =
                         foundSanitizedTemplate
-                                || json.getString("name").equals("Template_To_Sanitize");
+                                || json.getString("name").equals("Custom Event Template");
             }
             Assertions.assertTrue(foundSanitizedTemplate);
         } finally {
             webClient
                     .extensions()
+<<<<<<< HEAD
                     .delete(REQ_URL + "/Template_To_Sanitize", REQUEST_TIMEOUT_SECONDS);
 >>>>>>> 8a18f136 (working on test)
+=======
+                    .delete(
+                            String.format(
+                                    "%s/%s",
+                                    REQ_URL,
+                                    URLEncodedUtils.formatSegments("/Template_To_Sanitize")),
+                            REQUEST_TIMEOUT_SECONDS);
+>>>>>>> 28172cc5 (more work on test - loading resource not working)
         }
     }
 }
